@@ -1,38 +1,43 @@
 <template>
-  <client-only>
-    <Container
-      orientation="horizontal"
-      @drop="onColumnDrop($event)"
-      drag-handle-selector=".column-drag-handle"
-      @drag-start="dragStart"
-      :drop-placeholder="upperDropPlaceholderOptions"
-    >
-      <Draggable v-for="column in scene.children" :key="column.id">
-        <div :class="column.props.className">
-          <div class="card-column-header">
-            <span class="column-drag-handle">&#x2630;</span>
-            {{ column.name }}
+  <div>
+    <client-only>
+      <a-button @click="onEvent">main thread loop</a-button>
+      <a-button>web worker loop</a-button>
+
+      <Container
+        orientation="horizontal"
+        @drop="onColumnDrop($event)"
+        drag-handle-selector=".column-drag-handle"
+        @drag-start="dragStart"
+        :drop-placeholder="upperDropPlaceholderOptions"
+      >
+        <Draggable v-for="column in scene.children" :key="column.id">
+          <div :class="column.props.className">
+            <div class="card-column-header">
+              <span class="column-drag-handle">&#x2630;</span>
+              {{ column.name }}
+            </div>
+            <Container
+              group-name="col"
+              @drop="(e) => onCardDrop(column.id, e)"
+              @drag-start="(e) => log('drag start', e)"
+              @drag-end="(e) => log('drag end', e)"
+              :get-child-payload="getCardPayload(column.id)"
+              drag-class="card-ghost"
+              drop-class="card-ghost-drop"
+              :drop-placeholder="dropPlaceholderOptions"
+            >
+              <Draggable v-for="card in column.children" :key="card.id">
+                <div :class="card.props.className" :style="card.props.style">
+                  <p>{{ card.data }}</p>
+                </div>
+              </Draggable>
+            </Container>
           </div>
-          <Container
-            group-name="col"
-            @drop="(e) => onCardDrop(column.id, e)"
-            @drag-start="(e) => log('drag start', e)"
-            @drag-end="(e) => log('drag end', e)"
-            :get-child-payload="getCardPayload(column.id)"
-            drag-class="card-ghost"
-            drop-class="card-ghost-drop"
-            :drop-placeholder="dropPlaceholderOptions"
-          >
-            <Draggable v-for="card in column.children" :key="card.id">
-              <div :class="card.props.className" :style="card.props.style">
-                <p>{{ card.data }}</p>
-              </div>
-            </Draggable>
-          </Container>
-        </div>
-      </Draggable>
-    </Container>
-  </client-only>
+        </Draggable>
+      </Container>
+    </client-only>
+  </div>
 </template>
 
 <script>
@@ -101,6 +106,15 @@ export default {
     };
   },
   methods: {
+    onEvent() {
+      for (let i = 0; i < 10000; i++) {
+        for (let j = 0; j < 10000; j++) {
+          for (let k = 0; k < 1000; k++) {
+            console.log(Math.sqrt(i * j * k));
+          }
+        }
+      }
+    },
     onColumnDrop(dropResult) {
       const scene = Object.assign({}, this.scene);
       scene.children = applyDrag(scene.children, dropResult);

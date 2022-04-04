@@ -43,5 +43,22 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    extend(config, ctx) {
+      if (ctx.isClient) {
+        config.module.rules.push(
+          {
+            test: /\.worker\.ts$/,
+            loader: "worker-loader",
+            exclude: /(node_modules)/,
+          },
+          {
+            test: /\.worker\.js$/,
+            loader: "worker-loader",
+            exclude: /(node_modules)/,
+          }
+        );
+      }
+    },
+  },
 };
