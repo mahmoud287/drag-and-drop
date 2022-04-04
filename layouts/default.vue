@@ -1,28 +1,19 @@
 <template>
   <a-layout id="darg-and-drop">
-    <a-layout-header class="header">
-      <div class="logo" />
-      <a-menu
-        theme="dark"
-        mode="horizontal"
-        :default-selected-keys="['1']"
-        :style="{ lineHeight: '64px' }"
-      >
-        <a-menu-item key="1"> Drag And Drop </a-menu-item>
-      </a-menu>
-    </a-layout-header>
     <a-layout>
       <a-layout-sider width="300" style="background: #fff">
         <a-menu
           mode="inline"
-          :default-selected-keys="['1']"
           :default-open-keys="['Showcase']"
           :style="{ height: '100%', borderRight: 0 }"
         >
           <a-sub-menu key="Showcase">
             <span slot="title"><a-icon type="user" />Showcase</span>
             <a-menu-item key="1">
-              <nuxt-link to="/"> Card board</nuxt-link>
+              <nuxt-link to="/"> Comments</nuxt-link>
+            </a-menu-item>
+            <a-menu-item key="2">
+              <nuxt-link to="/dnd"> Card board</nuxt-link>
             </a-menu-item>
           </a-sub-menu>
         </a-menu>

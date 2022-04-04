@@ -1,5 +1,6 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  ssr: false,
   head: {
     title: "drag-and-drop",
     htmlAttrs: {
@@ -22,7 +23,11 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["@/plugins/antd-ui"],
+  plugins: [
+    "plugins/antd-ui",
+    { src: "plugins/inject-ww", ssr: false },
+    { src: "~/plugins/infinite-scroll", ssr: false },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
